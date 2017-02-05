@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Countries AR EXTENSION</name>
+    <version>1.0</version>
+    <author>Serag</author>
+    <link>http://aserag.com</link>
+    <code>OpenCart.co.in.countriesar</code>
+    <file path="admin/view/template/localisation/country_form.tpl">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+			<input type="text" name="name" value="<?php echo $name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" />
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+			<div class="input-group">
+					<span class="input-group-addon"><img src="view/image/flags/gb.png" title="English"></span>
+					<input type="text" name="name" value="<?php echo $name; ?>" placeholder="Country Name" id="input-name" class="form-control">
+			</div>  
+			<div class="input-group">
+					<span class="input-group-addon"><img src="view/image/flags/ar.png" title="Arabic"></span>
+					<input type="text" name="name_ar" value="<?php echo $name_ar; ?>" placeholder="Country Name AR" id="input-name-ar" class="form-control">
+			</div>  			
+			]]>
+			</add>
+        </operation>
+    </file>  
+	<file path="admin/model/localisation/country.php">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$this->db->query("UPDATE " . DB_PREFIX . "country SET name = '" . $this->db->escape($data['name']) . "', iso_code_2 = '" . $this->db->escape($data['iso_code_2']) . "', iso_code_3 = '" . $this->db->escape($data['iso_code_3']) . "', address_format = '" . $this->db->escape($data['address_format']) . "', postcode_required = '" . (int)$data['postcode_required'] . "', status = '" . (int)$data['status'] . "' WHERE country_id = '" . (int)$country_id . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+				$this->db->query("UPDATE " . DB_PREFIX . "country SET name = '" . $this->db->escape($data['name']) . "', name_ar = '" . $this->db->escape($data['name_ar']) . "', iso_code_2 = '" . $this->db->escape($data['iso_code_2']) . "', iso_code_3 = '" . $this->db->escape($data['iso_code_3']) . "', address_format = '" . $this->db->escape($data['address_format']) . "', postcode_required = '" . (int)$data['postcode_required'] . "', status = '" . (int)$data['status'] . "' WHERE country_id = '" . (int)$country_id . "'");
+			]]></add>
+		</operation>
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$this->db->query("INSERT INTO " . DB_PREFIX . "country SET name = '" . $this->db->escape($data['name']) . "', iso_code_2 = '" . $this->db->escape($data['iso_code_2']) . "', iso_code_3 = '" . $this->db->escape($data['iso_code_3']) . "', address_format = '" . $this->db->escape($data['address_format']) . "', postcode_required = '" . (int)$data['postcode_required'] . "', status = '" . (int)$data['status'] . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+				$this->db->query("INSERT INTO " . DB_PREFIX . "country SET name = '" . $this->db->escape($data['name']) . "', name_ar = '" . $this->db->escape($data['name_ar']) . "', iso_code_2 = '" . $this->db->escape($data['iso_code_2']) . "', iso_code_3 = '" . $this->db->escape($data['iso_code_3']) . "', address_format = '" . $this->db->escape($data['address_format']) . "', postcode_required = '" . (int)$data['postcode_required'] . "', status = '" . (int)$data['status'] . "'");
+			]]></add>
+		</operation>
+    </file>
+	<file path="admin/language/english/localisation/country.php">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$_['entry_name']              = 'Country Name';
+			]]></search>
+			<add position="after" trim="false" offset="0"><![CDATA[
+				$_['entry_name_ar']              = 'Country Name Ar';
+			]]></add>
+		</operation>
+    </file> 
+    <file path="admin/controller/localisation/country.php">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['heading_title'] = $this->language->get('heading_title');
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			$data['entry_name_ar'] = $this->language->get('entry_name_ar');
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			'name'       => $result['name'] . (($result['country_id'] == $this->config->get('config_country_id')) ? $this->language->get('text_default') : null),
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			'name_ar'       => $result['name_ar'], 
+			]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = $this->request->post['name'];
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			$this->request->post['name_ar'] ? $data['name_ar'] = $this->request->post['name_ar'] : $data['name_ar'] = $this->request->post['name'];
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = $country_info['name'];
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			empty($data['name_ar']) ?  $data['name_ar'] = $country_info['name_ar'] : $data['name_ar'] = $country_info['name'];
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = '';
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			$data['name_ar'] = '';
+            ]]></add>
+        </operation>
+    </file>   
+	<file path="admin/view/template/localisation/country_list.tpl">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+			  <td class="text-left"><?php echo $country['name']; ?></td>
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+			<td class="text-left">
+			  <div class="country-item">
+					  <img src="view/image/flags/gb.png" title="English">
+					  <?php echo $country['name']; ?>
+			  </div>
+			  <div class="country-item">
+					  <img src="view/image/flags/ar.png" title="Arabic">
+					  <?php echo $country['name_ar']; ?>
+			  </div>
+			 </td>
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/model/localisation/country.php">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+				if($_SESSION['language'] === 'ar'){
+					$query = $this->db->query("SELECT country_id, name_ar AS name, name AS name_en, iso_code_2, iso_code_3, address_format, postcode_required, status FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+				}else{
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+				}
+            ]]></add>
+        </operation>
+    </file>
+	<file path="catalog/model/localisation/zone.php">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+			if($_SESSION['language'] === 'ar'){
+				$query = $this->db->query("SELECT zone_id, country_id, name AS name_en, name_ar AS name, code, status FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+			}else{
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+			}
+			]]></add>
+        </operation>
+    </file>
+	<file path="admin/view/template/localisation/zone_form.tpl">
+        <operation>
+            <search trim="true" index="0"><![CDATA[            
+                <option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name']; ?></option>
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+				<option value="<?php echo $country['country_id']; ?>" selected="selected"><?php echo $country['name'] . ( $country['name_ar'] ?  ' : '.$country['name_ar'] : ' ' ) ; ?></option>
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+                <option value="<?php echo $country['country_id']; ?>"><?php echo $country['name']; ?></option>
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+				<option value="<?php echo $country['country_id']; ?>"><?php echo $country['name'] .  ( $country['name_ar'] ?  ' : '.$country['name_ar'] : ' ' ); ?></option>
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+				<input type="text" name="name" value="<?php echo $name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control" />
+            ]]></search>
+            <add position="replace" trim="false" offset="0"><![CDATA[
+                <div class="input-group">
+                    <span class="input-group-addon"><img src="view/image/flags/gb.png" title="English"></span>
+                    <input type="text" name="name" value="<?php echo $name; ?>" placeholder="<?php echo $entry_name; ?>" id="input-name" class="form-control">
+                </div>  
+                <div class="input-group">
+                    <span class="input-group-addon"><img src="view/image/flags/ar.png" title="Arabic"></span>
+                    <input type="text" name="name_ar" value="<?php echo $name_ar; ?>" placeholder="Zone Name AR" id="input-name-ar" class="form-control">
+                </div>
+			]]></add>
+        </operation>            
+    </file>
+	<file path="admin/model/localisation/zone.php">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$this->db->query("UPDATE " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "' WHERE zone_id = '" . (int)$zone_id . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+				$this->db->query("UPDATE " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', name_ar = '" . $this->db->escape($data['name_ar']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "' WHERE zone_id = '" . (int)$zone_id . "'");
+			]]></add>
+		</operation>
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$this->db->query("INSERT INTO " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+				$this->db->query("INSERT INTO " . DB_PREFIX . "zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape($data['name']) . "', name_ar = '" . $this->db->escape($data['name_ar']) . "', code = '" . $this->db->escape($data['code']) . "', country_id = '" . (int)$data['country_id'] . "'");
+			]]></add>
+		</operation>
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$sql = "SELECT *, z.name, c.name AS country FROM " . DB_PREFIX . "zone z LEFT JOIN " . DB_PREFIX . "country c ON (z.country_id = c.country_id)";
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+				$sql = "SELECT *, z.name, z.name_ar, c.name AS country, c.name_ar AS country_ar FROM " . DB_PREFIX . "zone z LEFT JOIN " . DB_PREFIX . "country c ON (z.country_id = c.country_id)";
+			]]></add>
+		</operation>
+    </file>
+	<file path="admin/controller/localisation/zone.php">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				'name'    => $result['name'] . (($result['zone_id'] == $this->config->get('config_zone_id')) ? $this->language->get('text_default') : null),
+			]]></search>
+			<add position="after" trim="false" offset="0"><![CDATA[
+				'name_ar'    => $result['name_ar'],
+				'country_ar' => $result['country_ar'],
+			]]></add>
+		</operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = $this->request->post['name'];
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			$this->request->post['name_ar'] ? $data['name_ar'] = $this->request->post['name_ar'] : $data['name_ar'] = $this->request->post['name'];
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = $zone_info['name'];
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			empty($data['name_ar']) ?  $data['name_ar'] = $zone_info['name_ar'] : $data['name_ar'] = $zone_info['name'];
+            ]]></add>
+        </operation>
+		<operation>
+            <search trim="true" index="0"><![CDATA[            
+			$data['name'] = '';
+            ]]></search>
+            <add position="after" trim="false" offset="0"><![CDATA[
+			$data['name_ar'] = '';
+            ]]></add>
+        </operation>
+    </file>
+	<file path="admin/view/template/localisation/zone_list.tpl">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				<td class="text-left"><?php echo $zone['country']; ?></td>
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+			  <td class="text-left">
+				<div class="country-item">
+					<img src="view/image/flags/gb.png" title="English">
+					<?php echo $zone['country']; ?>
+				</div>
+				<div class="country-item">
+					<img src="view/image/flags/ar.png" title="Arabic">
+					<?php echo $zone['country_ar']; ?>
+				</div>
+			  </td>			]]>
+			</add>
+		</operation>
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+			   <td class="text-left"><?php echo $zone['name']; ?></td>
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+			  <td class="text-left">
+				<div class="zone-item">
+					<img src="view/image/flags/gb.png" title="English">
+					<?php echo $zone['name']; ?>
+				</div>
+				<div class="zone-item">
+					<img src="view/image/flags/ar.png" title="Arabic">
+					<?php echo $zone['name_ar']; ?>
+				</div>
+			  </td>			]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file path="catalog/model/account/address.php">
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$result['country_id'] . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+			if($_SESSION['language'] === 'ar'){
+				$country_query = $this->db->query("SELECT country_id, name_ar AS name, name AS name_en, iso_code_2, iso_code_3, address_format, postcode_required, status  FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$result['country_id'] . "'");
+			}else{
+				$country_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE country_id = '" . (int)$result['country_id'] . "'");
+			}
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search trim="true" index="0"><![CDATA[            
+				$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$result['zone_id'] . "'");
+			]]></search>
+			<add position="replace" trim="false" offset="0"><![CDATA[
+			if($_SESSION['language'] === 'ar'){
+				$zone_query = $this->db->query("SELECT zone_id, country_id, name AS name_en, name_ar AS name, code, status FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$result['zone_id'] . "'");
+			}else{
+				$zone_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE zone_id = '" . (int)$result['zone_id'] . "'");
+			}
+			]]>
+			</add>
+		</operation>
+	</file>
+	
+</modification>
